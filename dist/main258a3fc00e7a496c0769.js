@@ -40,6 +40,63 @@ __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerat
 
 /***/ }),
 
+/***/ "./src/js/task01.js":
+/*!**************************!*\
+  !*** ./src/js/task01.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Task": () => (/* binding */ Task)
+/* harmony export */ });
+class Task {
+  constructor(taskName) {
+    let count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    this.ID = Math.floor(Math.random() * 1000000);
+    this.taskName = taskName;
+    this.count = Number(count);
+  }
+
+  set count(data) {
+    console.log(`Нельзя изменть значение счетчика`);
+  }
+
+  get count() {
+    return this.count;
+  }
+
+  countChange() {
+    this.count = Number(this.count) + 1;
+    return this;
+  }
+
+  set taskName(newName) {
+    console.log(`Нельзя изменть данную задачу`);
+  }
+
+  get taskName() {
+    return this.taskName;
+  }
+
+  taskNameChange(newTask) {
+    this.taskName = newTask;
+    return this;
+  }
+
+  get ID() {
+    return this.ID;
+  }
+
+  set ID(data) {
+    console.log(`Нельзя изменить ID`);
+  }
+
+}
+
+/***/ }),
+
 /***/ "./node_modules/core-js/es6/index.js":
 /*!*******************************************!*\
   !*** ./node_modules/core-js/es6/index.js ***!
@@ -9900,6 +9957,23 @@ try {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -9941,7 +10015,9 @@ _global["default"]._babelPolyfill = true;
   !*** ./src/main.js ***!
   \*********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _scss_index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/index.scss */ "./src/scss/index.scss");
+/* harmony import */ var _js_task01__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/task01 */ "./src/js/task01.js");
+/* harmony import */ var _scss_index_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scss/index.scss */ "./src/scss/index.scss");
+
 
 let count = 0;
 const imp = ['default', 'important', 'so-so'];
@@ -9963,8 +10039,15 @@ document.querySelector('.button-importance').addEventListener('click', _ref => {
     }
   }
 });
+const tsak01 = new _js_task01__WEBPACK_IMPORTED_MODULE_0__.Task('помыть машину', 1);
+console.log(tsak01);
+tsak01.taskName = 'sdfgsjf';
+console.log(tsak01); //tsak01.taskNameChange('купить квартиру');
+//console.log(tsak01);
+//tsak01.ID = '2';
+//console.log(tsak01);
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=main5102ecffca22560913b9.js.map
+//# sourceMappingURL=main258a3fc00e7a496c0769.js.map
