@@ -40,10 +40,10 @@ __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerat
 
 /***/ }),
 
-/***/ "./src/js/task01.js":
-/*!**************************!*\
-  !*** ./src/js/task01.js ***!
-  \**************************/
+/***/ "./src/js/task.js":
+/*!************************!*\
+  !*** ./src/js/task.js ***!
+  \************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -51,34 +51,57 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Task": () => (/* binding */ Task)
 /* harmony export */ });
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+
+function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
+
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+
+function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+
+var _ID = /*#__PURE__*/new WeakMap();
+
 class Task {
+  // #taskName;
+  // #count;
   constructor(taskName) {
     let count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-    this.ID = Math.floor(Math.random() * 1000000);
+
+    _classPrivateFieldInitSpec(this, _ID, {
+      writable: true,
+      value: void 0
+    });
+
+    _classPrivateFieldSet(this, _ID, Math.floor(Math.random() * 1000000).toString());
+
     this.taskName = taskName;
     this.count = Number(count);
   }
+  /* set count(data) {
+       console.log(`Нельзя изменить значение счетчика`);
+   }
+   get count() {
+       return this.#count;
+   }*/
 
-  set count(data) {
-    console.log(`Нельзя изменть значение счетчика`);
-  }
-
-  get count() {
-    return this.count;
-  }
 
   countChange() {
     this.count = Number(this.count) + 1;
     return this;
   }
+  /* set taskName(newName) {
+       console.log(`Нельзя изменить данную задачу`);
+   }
+   get taskName() {
+       return this.#taskName;
+   }*/
 
-  set taskName(newName) {
-    console.log(`Нельзя изменть данную задачу`);
-  }
-
-  get taskName() {
-    return this.taskName;
-  }
 
   taskNameChange(newTask) {
     this.taskName = newTask;
@@ -86,11 +109,158 @@ class Task {
   }
 
   get ID() {
-    return this.ID;
+    return _classPrivateFieldGet(this, _ID);
   }
 
   set ID(data) {
     console.log(`Нельзя изменить ID`);
+  }
+
+}
+
+/***/ }),
+
+/***/ "./src/js/timer.js":
+/*!*************************!*\
+  !*** ./src/js/timer.js ***!
+  \*************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Tomato": () => (/* binding */ Tomato)
+/* harmony export */ });
+/* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./task */ "./src/js/task.js");
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+
+
+
+var _making = /*#__PURE__*/new WeakMap();
+
+var _ready = /*#__PURE__*/new WeakMap();
+
+class Tomato {
+  constructor(obj) {
+    _classPrivateFieldInitSpec(this, _making, {
+      writable: true,
+      value: []
+    });
+
+    _classPrivateFieldInitSpec(this, _ready, {
+      writable: true,
+      value: []
+    });
+
+    if (obj.timeTask === undefined) {
+      this.timeTask = 25;
+    } else this.timeTask = obj.timeTask;
+
+    if (obj.pauseTime === undefined) {
+      this.pauseTime = 5;
+    } else this.pauseTime = obj.pauseTime;
+
+    if (obj.bigPauseTime === undefined) {
+      this.bigPauseTime = 15;
+    } else this.bigPauseTime = obj.bigPauseTime;
+
+    this.activeTask = null;
+
+    if (obj.tasks === undefined) {
+      this.queueTask = [];
+    } else this.queueTask = [obj.tasks];
+  }
+
+  get making() {
+    return _classPrivateFieldGet(this, _making);
+  }
+
+  get ready() {
+    return _classPrivateFieldGet(this, _ready);
+  }
+
+  addNewTask(taskName, count) {
+    const task = new _task__WEBPACK_IMPORTED_MODULE_0__.Task(taskName, count);
+    this.queueTask.push(task);
+  }
+
+  makeTaskActive(ID) {
+    const array = this.queueTask;
+    array.forEach(element => {
+      if (element.ID === ID) {
+        this.activeTask = element;
+        console.log(element);
+      }
+    });
+  }
+
+  changeCount(ID) {
+    const array = this.queueTask;
+    array.forEach(element => {
+      if (element.ID === ID) {
+        element.countChange();
+      }
+    });
+  }
+
+  checkActiveTask() {
+    if (this.activeTask != null) {
+      let workingTime = this.timeTask;
+      const timerId = setInterval(() => {
+        workingTime -= 1;
+        console.log(workingTime);
+
+        if (workingTime <= 0) {
+          console.log('Времы выполнения задачи истекло');
+
+          if (workingTime === 0 && this.activeTask.count % 3 === 0) {
+            let pause = this.bigPauseTime;
+            const timerRest = setInterval(() => {
+              if (pause >= 0) {
+                pause -= 1;
+                console.log(pause);
+              }
+
+              if (pause <= 0) {
+                clearInterval(timerRest);
+                console.log('Время отдыха окончено');
+              }
+            }, 1000);
+          } else if (workingTime === 0) {
+            let pause = this.pauseTime;
+            const timerRest = setInterval(() => {
+              if (pause >= 0) {
+                pause -= 1;
+                console.log(pause);
+              }
+
+              if (pause <= 0) {
+                clearInterval(timerRest);
+                console.log('Время отдыха окончено');
+              }
+            }, 1000);
+          } // this.activeTask = null;
+
+
+          clearInterval(timerId);
+        }
+      }, 1000);
+    } else alert('Активных задач нет');
+
+    this.changeCount(this.activeTask.ID);
+    console.log(this.activeTask);
+  }
+
+  init() {
+    this.checkActiveTask();
   }
 
 }
@@ -10015,8 +10185,10 @@ _global["default"]._babelPolyfill = true;
   !*** ./src/main.js ***!
   \*********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _js_task01__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/task01 */ "./src/js/task01.js");
-/* harmony import */ var _scss_index_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scss/index.scss */ "./src/scss/index.scss");
+/* harmony import */ var _js_task__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/task */ "./src/js/task.js");
+/* harmony import */ var _js_timer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/timer */ "./src/js/timer.js");
+/* harmony import */ var _scss_index_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scss/index.scss */ "./src/scss/index.scss");
+
 
 
 let count = 0;
@@ -10039,15 +10211,24 @@ document.querySelector('.button-importance').addEventListener('click', _ref => {
     }
   }
 });
-const tsak01 = new _js_task01__WEBPACK_IMPORTED_MODULE_0__.Task('помыть машину', 1);
-console.log(tsak01);
-tsak01.taskName = 'sdfgsjf';
-console.log(tsak01); //tsak01.taskNameChange('купить квартиру');
-//console.log(tsak01);
-//tsak01.ID = '2';
-//console.log(tsak01);
+const tsak01 = new _js_task__WEBPACK_IMPORTED_MODULE_0__.Task('помыть машину', 3);
+const obj = {
+  timeTask: 5,
+  pauseTime: 15,
+  bigPauseTime: 10,
+  tasks: tsak01
+};
+console.log(tsak01.ID);
+const IDtask = tsak01.ID;
+const timer = new _js_timer__WEBPACK_IMPORTED_MODULE_1__.Tomato(obj);
+console.log(timer);
+timer.addNewTask('купить квартиру', 2);
+timer.addNewTask('испечь торт', 1);
+timer.makeTaskActive(`${IDtask}`);
+console.log(timer);
+timer.init();
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=main258a3fc00e7a496c0769.js.map
+//# sourceMappingURL=main803316e2072dd505224b.js.map

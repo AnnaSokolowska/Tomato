@@ -1,4 +1,5 @@
 import {Task} from './js/task';
+import { Tomato } from './js/timer';
 import './scss/index.scss';
 
 let count = 0;
@@ -18,8 +19,20 @@ document.querySelector('.button-importance').addEventListener('click', ({target}
   }
 })
 
-const tsak01 = new Task('помыть машину', 1);
-console.log(tsak01);
-tsak01.taskName = 'sdfgsjf';
-console.log(tsak01);
+const tsak01 = new Task( 'помыть машину', 3);
+const obj = {
+timeTask: 5,
+pauseTime: 15,
+bigPauseTime: 10,
+tasks: tsak01,
+};
+console.log(tsak01.ID);
+const IDtask = tsak01.ID;
+const timer = new Tomato(obj);
+console.log(timer);
+timer.addNewTask('купить квартиру', 2);
+timer.addNewTask('испечь торт', 1);
+timer.makeTaskActive(`${IDtask}`);
 
+console.log(timer);
+timer.init();
