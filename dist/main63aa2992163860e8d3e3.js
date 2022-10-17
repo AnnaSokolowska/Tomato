@@ -71,17 +71,21 @@ class ControllerTomato {
       e.preventDefault();
       const input = document.getElementById('task-name');
       const taskName = input.value;
-      const imp = document.querySelector('.button-importance');
-      let importance = imp.getAttribute('aria-label');
-      console.log(importance);
+      console.log(input.value);
 
-      if (importance === "Указать важность") {
-        importance = 'default';
-      }
+      if (input.value !== '') {
+        const imp = document.querySelector('.button-importance');
+        let importance = imp.getAttribute('aria-label');
+        console.log(importance);
 
-      let count = 1;
-      this.tomato.addNewTask(taskName, count, importance);
-      form.reset();
+        if (importance === "Указать важность") {
+          importance = 'default';
+        }
+
+        let count = 1;
+        this.tomato.addNewTask(taskName, count, importance);
+        form.reset();
+      } else alert('Невозможно создать пустую задачу');
     });
   }
 
@@ -10508,4 +10512,4 @@ timer.init();
 
 /******/ })()
 ;
-//# sourceMappingURL=mainabe18c5a10c2922e2ad5.js.map
+//# sourceMappingURL=main63aa2992163860e8d3e3.js.map

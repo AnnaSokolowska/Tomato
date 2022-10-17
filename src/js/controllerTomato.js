@@ -18,15 +18,19 @@ export class ControllerTomato {
             e.preventDefault();
             const input = document.getElementById('task-name');
             const taskName = input.value;
-            const imp = document.querySelector('.button-importance');
-            let  importance = imp.getAttribute('aria-label');
-            console.log(importance);
-            if  (importance === "Указать важность") {
-                importance = 'default';
-            }
-            let count = 1;
-            this.tomato.addNewTask(taskName, count, importance);
-            form.reset();
+            console.log(input.value);
+            if (input.value !== '') {
+                const imp = document.querySelector('.button-importance');
+                let  importance = imp.getAttribute('aria-label');
+                console.log(importance);
+                if  (importance === "Указать важность") {
+                    importance = 'default';
+                }
+                let count = 1;
+                this.tomato.addNewTask(taskName, count, importance);
+                form.reset();
+            } else  alert('Невозможно создать пустую задачу');
+            
         })
 
     } 
