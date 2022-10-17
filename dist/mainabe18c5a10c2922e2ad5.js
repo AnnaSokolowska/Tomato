@@ -40,6 +40,202 @@ __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerat
 
 /***/ }),
 
+/***/ "./src/js/controllerTomato.js":
+/*!************************************!*\
+  !*** ./src/js/controllerTomato.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ControllerTomato": () => (/* binding */ ControllerTomato)
+/* harmony export */ });
+class ControllerTomato {
+  constructor(app, tomato) {
+    this.app = app;
+    this.tomato = tomato;
+    this.init();
+  }
+
+  init() {
+    this.addTask();
+    this.addActiveTask();
+    this.addImportnace();
+  }
+
+  addTask() {
+    const form = document.querySelector('.task-form');
+    console.log(form);
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const input = document.getElementById('task-name');
+      const taskName = input.value;
+      const imp = document.querySelector('.button-importance');
+      let importance = imp.getAttribute('aria-label');
+      console.log(importance);
+
+      if (importance === "Указать важность") {
+        importance = 'default';
+      }
+
+      let count = 1;
+      this.tomato.addNewTask(taskName, count, importance);
+      form.reset();
+    });
+  }
+
+  addActiveTask() {
+    const list = document.querySelector('.pomodoro-tasks__quest-tasks');
+    console.log(this.tomato);
+    list.addEventListener('click', e => {
+      const target = e.target;
+
+      if (target.closest('.pomodoro-tasks__task-text')) {
+        const button = target.closest('.pomodoro-tasks__task-text'); // button.classList.add('pomodoro-tasks__task-text-active');
+
+        const taskID = target.closest('.pomodoro-tasks__list-task').getAttribute('id');
+        console.log(button);
+        this.tomato.makeTaskActive(`${taskID}`);
+        console.log(this.tomato);
+      }
+
+      if (target.closest('.pomodoro-tasks__task-button')) {
+        const popup = target.closest('.burger-popup');
+        console.log(popup); //popup.classList.add('burger-popup_active');
+      }
+    });
+  }
+
+  addImportnace() {
+    let count = 0;
+    const imp = ['default', 'important', 'so-so'];
+    document.querySelector('.button-importance').addEventListener('click', _ref => {
+      let {
+        target
+      } = _ref;
+      count += 1;
+
+      if (count >= imp.length) {
+        count = 0;
+      }
+
+      for (let i = 0; i < imp.length; i++) {
+        if (count === i) {
+          target.classList.add(imp[i]);
+          target.setAttribute('aria-label', `${imp[i]}`);
+        } else {
+          target.classList.remove(imp[i]);
+        }
+      }
+    });
+  }
+
+}
+
+/***/ }),
+
+/***/ "./src/js/renderTomato.js":
+/*!********************************!*\
+  !*** ./src/js/renderTomato.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "RenderTomato": () => (/* binding */ RenderTomato)
+/* harmony export */ });
+/* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./task */ "./src/js/task.js");
+
+class RenderTomato {
+  constructor(app, tomato) {
+    this.app = app;
+    this.tomato = tomato;
+    this.init();
+  }
+
+  init() {
+    this.wrapper = document.querySelector('.main__container');
+    this.wrapDiv = document.createElement('div');
+    this.wrapDiv.classList.add('pomodoro-tasks');
+    this.divForm = document.querySelector('.pomodoro-form');
+    this.createTomato();
+  }
+
+  createTomato() {
+    this.wrapper.textContent = '';
+    this.divForm.textContent = '';
+    const queueList = this.createList();
+    const formTask = this.createForm();
+    this.wrapDiv.append(queueList);
+    this.divForm.append(formTask);
+    this.wrapper.append(this.divForm, this.wrapDiv);
+  }
+
+  createList() {
+    const list = document.createElement('ul');
+    list.classList.add('pomodoro-tasks__quest-tasks');
+    this.tomato.queueTask.forEach(task => {
+      const item = document.createElement('li');
+      item.classList.add('pomodoro-tasks__list-task');
+      item.classList.add(`${task.importance}`);
+      item.setAttribute('id', `${task.ID}`);
+      const span = document.createElement('span');
+      span.classList.add('count-number');
+      span.textContent = `${task.count}`;
+      const button = document.createElement('button');
+      button.classList.add('pomodoro-tasks__task-text');
+
+      if (task === this.tomato.activeTask) {
+        button.classList.add('pomodoro-tasks__task-text_active');
+      } else button.classList.remove('pomodoro-tasks__task-text_active');
+
+      button.textContent = `${task.getTaskName()}`;
+      const btnClose = document.createElement('button');
+      btnClose.classList.add('pomodoro-tasks__task-button');
+      const popUp = document.createElement('div');
+      popUp.classList.add('burger-popup');
+      const btnEdit = document.createElement('button');
+      btnEdit.classList.add('popup-button', 'burger-popup__edit-button');
+      btnEdit.textContent = 'Редактировать';
+      const btnPopDel = document.createElement('button');
+      btnPopDel.classList.add('burger-popup__delete-button', 'popup-button');
+      btnPopDel.textContent = 'Удалить';
+      popUp.append(btnEdit, btnPopDel);
+      item.append(span, button, btnClose, popUp);
+      list.append(item);
+    });
+    return list;
+    console.log(list);
+  }
+
+  createForm() {
+    const form = document.createElement('form');
+    form.classList.add('task-form'); //form.setAttribute('action', 'submit');
+
+    const input = document.createElement('input');
+    input.classList.add('task-name', 'input-primary');
+    input.setAttribute('type', 'text');
+    input.setAttribute('name', 'task-name');
+    input.setAttribute('id', 'task-name');
+    input.setAttribute('placeholder', 'название задачи');
+    const btnImpotance = document.createElement('button');
+    btnImpotance.classList.add('button', 'button-importance', 'default');
+    btnImpotance.setAttribute('type', 'button');
+    btnImpotance.setAttribute('aria-label', 'Указать важность');
+    const btnAdd = document.createElement('button');
+    btnAdd.classList.add('button', 'button-primary', 'task-form__add-button');
+    btnAdd.setAttribute('type', 'submit');
+    btnAdd.textContent = 'Добавить';
+    form.append(input, btnImpotance, btnAdd);
+    return form;
+  }
+
+}
+
+/***/ }),
+
 /***/ "./src/js/task.js":
 /*!************************!*\
   !*** ./src/js/task.js ***!
@@ -49,8 +245,13 @@ __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerat
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Task": () => (/* binding */ Task)
+/* harmony export */   "NessesaryTask": () => (/* binding */ NessesaryTask),
+/* harmony export */   "StandartTask": () => (/* binding */ StandartTask),
+/* harmony export */   "Task": () => (/* binding */ Task),
+/* harmony export */   "UnnessesaryTask": () => (/* binding */ UnnessesaryTask)
 /* harmony export */ });
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
 
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
@@ -68,8 +269,6 @@ function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.
 var _ID = /*#__PURE__*/new WeakMap();
 
 class Task {
-  // #taskName;
-  // #count;
   constructor(taskName) {
     let count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
@@ -83,25 +282,11 @@ class Task {
     this.taskName = taskName;
     this.count = Number(count);
   }
-  /* set count(data) {
-       console.log(`Нельзя изменить значение счетчика`);
-   }
-   get count() {
-       return this.#count;
-   }*/
-
 
   countChange() {
     this.count = Number(this.count) + 1;
     return this;
   }
-  /* set taskName(newName) {
-       console.log(`Нельзя изменить данную задачу`);
-   }
-   get taskName() {
-       return this.#taskName;
-   }*/
-
 
   taskNameChange(newTask) {
     this.taskName = newTask;
@@ -116,7 +301,66 @@ class Task {
     console.log(`Нельзя изменить ID`);
   }
 
+  getTaskName() {
+    return this.taskName;
+  }
+
 }
+class NessesaryTask extends Task {
+  constructor(taskName, count, ID) {
+    super(taskName, count, ID);
+
+    _defineProperty(this, "importance", 'important');
+  }
+
+}
+class StandartTask extends Task {
+  constructor(taskName, count, ID) {
+    super(taskName, count, ID);
+
+    _defineProperty(this, "importance", 'default');
+  }
+
+}
+class UnnessesaryTask extends Task {
+  constructor(taskName, count, ID) {
+    super(taskName, count, ID);
+
+    _defineProperty(this, "importance", 'so-so');
+  }
+
+}
+/*class MakeTaskCommand {
+    constructor(task, importance) {
+        this.task = task;
+        this.importance = importance;
+    }
+    excute() {
+        throw new Error('Not implemented');
+    }
+}
+
+class Add extends MakeTaskCommand {
+    execute() {
+        this.task = task;
+        this.importance = this.importance;
+        return true
+    }
+}
+
+class AddTask {
+    constructor() {
+        this.commands = [];
+    }
+    operation(task, importance) {
+        const Command = (importance === 'nessesary') ? new NessesaryTask() : 
+        (importance === 'standart') ? new StandartTask() : new UnnessesaryTask;
+        const command = new Command(task, importance);
+        if (command.execute()) {
+            this.commands.push(command);
+        }
+    }
+}*/
 
 /***/ }),
 
@@ -132,6 +376,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Tomato": () => (/* binding */ Tomato)
 /* harmony export */ });
 /* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./task */ "./src/js/task.js");
+/* harmony import */ var _renderTomato__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./renderTomato */ "./src/js/renderTomato.js");
+/* harmony import */ var _controllerTomato__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./controllerTomato */ "./src/js/controllerTomato.js");
 function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
 
 function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
@@ -144,12 +390,16 @@ function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { 
 
 
 
+
+
 var _making = /*#__PURE__*/new WeakMap();
 
 var _ready = /*#__PURE__*/new WeakMap();
 
 class Tomato {
   constructor(obj) {
+    let renderApp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
     _classPrivateFieldInitSpec(this, _making, {
       writable: true,
       value: []
@@ -159,6 +409,14 @@ class Tomato {
       writable: true,
       value: []
     });
+
+    if (Tomato.instance) {
+      return Tomato.instance;
+    }
+
+    this.renderApp = renderApp;
+    this.renderTomato = null;
+    this.controllerTomato = null;
 
     if (obj.timeTask === undefined) {
       this.timeTask = 25;
@@ -177,6 +435,8 @@ class Tomato {
     if (obj.tasks === undefined) {
       this.queueTask = [];
     } else this.queueTask = [obj.tasks];
+
+    Tomato.instance = this;
   }
 
   get making() {
@@ -187,9 +447,46 @@ class Tomato {
     return _classPrivateFieldGet(this, _ready);
   }
 
-  addNewTask(taskName, count) {
-    const task = new _task__WEBPACK_IMPORTED_MODULE_0__.Task(taskName, count);
-    this.queueTask.push(task);
+  setControllerTomato() {
+    if (this.renderApp) {
+      this.controllerTomato = new _controllerTomato__WEBPACK_IMPORTED_MODULE_2__.ControllerTomato(this.renderApp, this);
+    }
+  }
+
+  setRenderTomato() {
+    if (this.renderApp) {
+      this.renderTomato = new _renderTomato__WEBPACK_IMPORTED_MODULE_1__.RenderTomato(this.renderApp, this);
+      console.log(this.renderTomato);
+    }
+  }
+
+  addNewTask(taskName, count, importance) {
+    if (importance === 'important') {
+      const task = new _task__WEBPACK_IMPORTED_MODULE_0__.NessesaryTask(taskName, count, importance);
+      this.changeCount(`${task.ID}`);
+      this.queueTask.push(task);
+    }
+
+    if (importance === 'default') {
+      const task = new _task__WEBPACK_IMPORTED_MODULE_0__.StandartTask(taskName, count, importance);
+      this.changeCount(`${task.ID}`);
+      this.queueTask.push(task);
+    }
+
+    if (importance === 'so-so') {
+      const task = new _task__WEBPACK_IMPORTED_MODULE_0__.UnnessesaryTask(taskName, count, importance);
+      this.changeCount(`${task.ID}`);
+      this.queueTask.push(task);
+    }
+
+    this.setRenderTomato();
+    this.setControllerTomato();
+  }
+
+  init() {
+    // this.checkActiveTask();
+    this.setRenderTomato();
+    this.setControllerTomato();
   }
 
   makeTaskActive(ID) {
@@ -200,6 +497,8 @@ class Tomato {
         console.log(element);
       }
     });
+    this.setRenderTomato();
+    this.setControllerTomato();
   }
 
   changeCount(ID) {
@@ -247,20 +546,16 @@ class Tomato {
                 console.log('Время отдыха окончено');
               }
             }, 1000);
-          } // this.activeTask = null;
+          } //  this.activeTask = null;
 
 
           clearInterval(timerId);
         }
       }, 1000);
-    } else alert('Активных задач нет');
+    } else alert('Активных задач нет'); //this.changeCount(this.activeTask.ID);
 
-    this.changeCount(this.activeTask.ID);
+
     console.log(this.activeTask);
-  }
-
-  init() {
-    this.checkActiveTask();
   }
 
 }
@@ -10191,27 +10486,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-let count = 0;
-const imp = ['default', 'important', 'so-so'];
-document.querySelector('.button-importance').addEventListener('click', _ref => {
-  let {
-    target
-  } = _ref;
-  count += 1;
-
-  if (count >= imp.length) {
-    count = 0;
-  }
-
-  for (let i = 0; i < imp.length; i++) {
-    if (count === i) {
-      target.classList.add(imp[i]);
-    } else {
-      target.classList.remove(imp[i]);
-    }
-  }
-});
-const tsak01 = new _js_task__WEBPACK_IMPORTED_MODULE_0__.Task('помыть машину', 3);
+const tsak01 = new _js_task__WEBPACK_IMPORTED_MODULE_0__.UnnessesaryTask('помыть машину', 2, 'so-so');
+const tsak02 = new _js_task__WEBPACK_IMPORTED_MODULE_0__.NessesaryTask('купить квартиру', 1);
+console.log(tsak02);
 const obj = {
   timeTask: 5,
   pauseTime: 15,
@@ -10220,15 +10497,15 @@ const obj = {
 };
 console.log(tsak01.ID);
 const IDtask = tsak01.ID;
-const timer = new _js_timer__WEBPACK_IMPORTED_MODULE_1__.Tomato(obj);
-console.log(timer);
-timer.addNewTask('купить квартиру', 2);
-timer.addNewTask('испечь торт', 1);
-timer.makeTaskActive(`${IDtask}`);
+const timer = new _js_timer__WEBPACK_IMPORTED_MODULE_1__.Tomato(obj, '.pomodoro-tasks');
+console.log(timer); //timer.addNewTask('купить квартиру', 2,'important');
+//timer.addNewTask('испечь торт', 1, 'default');
+//timer.makeTaskActive(`${IDtask}`);
+
 console.log(timer);
 timer.init();
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=main803316e2072dd505224b.js.map
+//# sourceMappingURL=mainabe18c5a10c2922e2ad5.js.map
